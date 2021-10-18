@@ -46,7 +46,6 @@ public class PictureController {
     @DeleteMapping
     public void deletePicture(@RequestParam Long pictureId) {
         pictureRepository.deleteById(pictureId);
-
     }
 
     @GetMapping(path = "/all")
