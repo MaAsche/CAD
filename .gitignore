@@ -4,6 +4,8 @@
 /backend/.gradle
 /backend/build
 /backend/*.iml
+.DS_Store
+../.DS_Store
 
 /frontend/node_modules
 /frontend/*.iml
