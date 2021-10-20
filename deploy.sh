@@ -1,30 +1,26 @@
 #!/usr/bin/env bash
 
-
-# Setup Backend
 rm -rf backend/build/
-echo "Deleted build/ folder"
-
 ./backend/gradlew bootJar -p ./backend
-echo "Generating jar file"
+echo "Built backend"
 
-#Copy execute_commands_on_ec2.sh file which has commands to be executed on server... Here we are copying this file
-# every time to automate this process through 'deploy.sh' so that whenever that file changes, it's taken care of
+cd frontend
+rm -rf build
+npm install
+npm run-script build
+cd ..
+echo "Built Frontend"
+
+echo "Set up folder structure on EC2 instance"
 scp -i "~/Downloads/exercise2.pem" execute_commands_on_ec2.sh ubuntu@ec2-52-28-151-166.eu-central-1.compute.amazonaws.com:/home/ubuntu
-echo "Copied latest 'execute_commands_on_ec2.sh' file from local machine to ec2 instance"
+scp -i "~/Downloads/exercise2.pem" backend/build/libs/backend-0.0.1-SNAPSHOT.jar ubuntu@ec2-52-28-151-166.eu-central-1.compute.amazonaws.com:/home/ubuntu/server.jar
+scp -i "~/Downloads/exercise2.pem" -r frontend/build ubuntu@ec2-52-28-151-166.eu-central-1.compute.amazonaws.com:/home/ubuntu/
+ssh -i "~/Downloads/exercise2.pem" ubuntu@ec2-52-28-151-166.eu-central-1.compute.amazonaws.com mv build static
+echo "Copied latest files to EC2 instance"
 
-scp -i "~/Downloads/exercise2.pem" backend/build/libs/backend-0.0.1-SNAPSHOT.jar ubuntu@ec2-52-28-151-166.eu-central-1.compute.amazonaws.com:/home/ubuntu
-echo "Copied jar file from local machine to ec2 instance"
-
-# give execute permission to execute_commands_on_ec2
 ssh -i "~/Downloads/exercise2.pem" ubuntu@ec2-52-28-151-166.eu-central-1.compute.amazonaws.com chmod 777 execute_commands_on_ec2.sh
+ssh -i "~/Downloads/exercise2.pem" ubuntu@ec2-52-28-151-166.eu-central-1.compute.amazonaws.com sudo apt-get -y install openjdk-11-jdk
+echo "Set up for start on EC2 instance"
 
-# install java 11
-ssh -i "~/Downloads/exercise2.pem" ubuntu@ec2-52-28-151-166.eu-central-1.compute.amazonaws.com sudo apt-get install openjdk-11-jdk
-
-echo "Connecting to ec2 instance and starting server using java -jar command"
-ssh -i "~/Downloads/exercise2.pem" ubuntu@ec2-52-28-151-166.eu-central-1.compute.amazonaws.com ./execute_commands_on_ec2.sh
-
-
-
-# Setup Frontend
+ssh -i "~/Downloads/exercise2.pem" ubuntu@ec2-52-28-151-166.eu-central-1.compute.amazonaws.com ./execute_commands_on_ec2.sh &
+echo "Started service on EC2 instance"
