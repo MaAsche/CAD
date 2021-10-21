@@ -6,6 +6,7 @@ echo "Built backend"
 
 cd frontend
 rm -rf build
+rm -rf public/images
 npm install
 npm run-script build
 cd ..
@@ -15,6 +16,7 @@ echo "Set up folder structure on EC2 instance"
 scp -i "~/Downloads/exercise2.pem" execute_commands_on_ec2.sh ubuntu@ec2-52-28-151-166.eu-central-1.compute.amazonaws.com:/home/ubuntu
 scp -i "~/Downloads/exercise2.pem" backend/build/libs/backend-0.0.1-SNAPSHOT.jar ubuntu@ec2-52-28-151-166.eu-central-1.compute.amazonaws.com:/home/ubuntu/server.jar
 scp -i "~/Downloads/exercise2.pem" -r frontend/build ubuntu@ec2-52-28-151-166.eu-central-1.compute.amazonaws.com:/home/ubuntu/
+ssh -i "~/Downloads/exercise2.pem" ubuntu@ec2-52-28-151-166.eu-central-1.compute.amazonaws.com sudo rm -rf static
 ssh -i "~/Downloads/exercise2.pem" ubuntu@ec2-52-28-151-166.eu-central-1.compute.amazonaws.com mv build static
 echo "Copied latest files to EC2 instance"
 

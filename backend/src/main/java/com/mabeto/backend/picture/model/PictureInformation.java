@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Table(name = "picture")
-public class Picture {
+public class PictureInformation {
     @Id
     @GeneratedValue
     private Long Id;
@@ -20,7 +20,4 @@ public class Picture {
     private String description = "";
 
     private LocalDateTime createdAt;
-
-    @Lob
-    private byte[] image;
 }
