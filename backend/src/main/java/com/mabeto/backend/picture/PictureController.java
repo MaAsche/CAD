@@ -1,6 +1,6 @@
 package com.mabeto.backend.picture;
 
-
+import com.mabeto.backend.fileio.AmazonStorageHandler;
 import com.mabeto.backend.fileio.FilesystemPictureHandler;
 import com.mabeto.backend.picture.model.PictureInformation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +18,13 @@ import java.util.Optional;
 public class PictureController {
     private final PictureInformationRepository pictureInformationRepository;
     private final FilesystemPictureHandler filesystemHandler;
+    private final AmazonStorageHandler amazonStorageHandler;
 
     @Autowired
     public PictureController(PictureInformationRepository pictureInformationRepository) throws IOException {
         this.pictureInformationRepository = pictureInformationRepository;
         this.filesystemHandler = new FilesystemPictureHandler();
+        this.amazonStorageHandler = new AmazonStorageHandler();
     }
 
     @PostMapping
@@ -34,6 +36,7 @@ public class PictureController {
                 .build();
         pictureInformationRepository.save(information);
         filesystemHandler.putImage(information.getId(), image);
+        amazonStorageHandler.saveFile(file);
         return information;
     }
 
@@ -52,6 +55,7 @@ public class PictureController {
     public void deletePicture(@RequestParam Long pictureId) throws IOException {
         pictureInformationRepository.deleteById(pictureId);
         filesystemHandler.deleteImage(pictureId);
+        // amazonStorageHandler.deleteFIle("2021102600591611708573847.jpg");
     }
 
     @GetMapping(path = "/all")
