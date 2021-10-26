@@ -1,6 +1,7 @@
 package com.mabeto.backend.picture;
 
 import com.mabeto.backend.fileio.AmazonStorageHandler;
+import com.mabeto.backend.fileio.DynamoDBHandler;
 import com.mabeto.backend.fileio.FilesystemPictureHandler;
 import com.mabeto.backend.picture.model.PictureInformation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +20,14 @@ public class PictureController {
     private final PictureInformationRepository pictureInformationRepository;
     private final FilesystemPictureHandler filesystemHandler;
     private final AmazonStorageHandler amazonStorageHandler;
+    private final DynamoDBHandler dynamoDBHandler;
 
     @Autowired
     public PictureController(PictureInformationRepository pictureInformationRepository) throws IOException {
         this.pictureInformationRepository = pictureInformationRepository;
         this.filesystemHandler = new FilesystemPictureHandler();
         this.amazonStorageHandler = new AmazonStorageHandler();
+        this.dynamoDBHandler = new DynamoDBHandler();
     }
 
     @PostMapping
@@ -36,7 +39,8 @@ public class PictureController {
                 .build();
         pictureInformationRepository.save(information);
         filesystemHandler.putImage(information.getId(), image);
-        amazonStorageHandler.saveFile(file);
+        final String filename = amazonStorageHandler.saveFile(file);
+        dynamoDBHandler.createPictureDetails(filename);
         return information;
     }
 
