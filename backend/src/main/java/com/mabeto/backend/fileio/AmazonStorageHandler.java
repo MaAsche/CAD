@@ -2,12 +2,10 @@ package com.mabeto.backend.fileio;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.auth.EnvironmentVariableCredentialsProvider;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.DeleteObjectsResult;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectResult;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,19 +15,17 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class AmazonStorageHandler {
-    private static final String accesKey = "";
-    private static final String secretKey = "";
     private static final String bucketName = "mabetoexercise";
-
-    private final BasicAWSCredentials creds;
     private final AmazonS3 s3client;
 
     public AmazonStorageHandler(){
-        this.creds = new BasicAWSCredentials(accesKey, secretKey);
-        this.s3client = AmazonS3ClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).withCredentials(new AWSStaticCredentialsProvider(creds)).build();
+        this.s3client = AmazonS3ClientBuilder.standard()
+                .withRegion(Regions.EU_CENTRAL_1)
+                .withCredentials(new EnvironmentVariableCredentialsProvider())
+                .build();
     }
 
-    public String saveFile(MultipartFile multipartFile) throws AmazonServiceException, SdkClientException, IOException {
+    public String saveFile(MultipartFile multipartFile) throws AmazonServiceException, IOException {
         ObjectMetadata data = new ObjectMetadata();
         data.setContentType(multipartFile.getContentType());
         data.setContentLength(multipartFile.getSize());
@@ -39,7 +35,7 @@ public class AmazonStorageHandler {
         return filename;
     }
 
-    public void deleteFIle(String objectKEy) throws SdkClientException, AmazonServiceException {
+    public void deleteFIle(String objectKEy) throws  AmazonServiceException {
          s3client.deleteObject(bucketName, objectKEy);
     }
 }
