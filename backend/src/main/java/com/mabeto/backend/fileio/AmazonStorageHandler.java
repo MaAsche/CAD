@@ -17,8 +17,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class AmazonStorageHandler {
-    private static final String accesKey = "AKIARFRS7JMERYFUF652";
-    private static final String secretKey = "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";
+    private static final String accesKey = "";
+    private static final String secretKey = "";
     private static final String bucketName = "mabetoexercise";
 
     private final BasicAWSCredentials creds;
