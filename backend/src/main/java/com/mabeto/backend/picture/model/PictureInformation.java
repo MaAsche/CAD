@@ -1,23 +1,16 @@
 package com.mabeto.backend.picture.model;
 
 
-import lombok.*;
-
-import javax.persistence.*;
-import java.time.LocalDateTime;
-
-@Builder
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Entity
-@Table(name = "picture")
 public class PictureInformation {
-    @Id
-    @GeneratedValue
-    private Long Id;
+    public final String id;
 
-    private String description = "";
+    public final String description;
 
-    private LocalDateTime createdAt;
+    public final long createdAt;
+
+    public PictureInformation(String id, String description, long createdAt) {
+        this.id = id;
+        this.description = description;
+        this.createdAt = createdAt;
+    }
 }

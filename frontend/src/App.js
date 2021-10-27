@@ -52,7 +52,7 @@ function App() {
   const deleteEntry = (id) => {
     setIsLoaded(false);
 
-    fetch(`${pictureUrl}?pictureId=${id}`, { 
+    fetch(`${pictureUrl}?id=${id}`, {
       method: 'DELETE',
     })
         .then(() => getEntries() );

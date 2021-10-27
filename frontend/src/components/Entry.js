@@ -7,7 +7,7 @@ const Entry = ({ entry, onDelete }) => {
       <h3>{entry.description} 
         <FaTimes style={{ color:'red', cursor: 'pointer'}} onClick={() => onDelete(entry.id)}/>
       </h3>
-      <img src={`/images/${entry.id}`} alt="img" width="400" height="400"/>
+      <img src={`https://mabetoexercise.s3.eu-central-1.amazonaws.com/${entry.id}`} alt="img" width="400" height="400"/>
     </div>
   )
 }
