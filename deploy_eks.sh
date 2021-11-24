@@ -1,4 +1,4 @@
 bash build.sh
-docker build ./deploy -f ./Dockerfile -t image-blog
+docker build ./deploy -f ./Dockerfile -t timetrackingtool
 
 # TODO deploy

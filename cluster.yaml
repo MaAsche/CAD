@@ -1,0 +1,29 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: EKS-timetrackingtool-Cluster
+  region: eu-central-1
+
+vpc:
+  id: vpc-052fda737250375cd
+  cidr: "192.168.0.0/16"
+  subnets:
+    public:
+      eu-central-1a:
+        id: subnet-071a08f1643457f29
+      eu-central-1b:
+        id: subnet-0f6d4cea5cda88a75
+    private:
+      eu-central-1a:
+        id: subnet-096ddc8faee2615ba
+      eu-central-1b:
+        id: subnet-0ac536bbbc471762e
+
+nodeGroups:
+  - name: EKS-public-workers
+    instanceType: t2.micro
+    desiredCapacity: 2
+  - name: EKS-private-workers
+    instanceType: t2.micro
+    desiredCapacity: 1
+    privateNetworking: true
